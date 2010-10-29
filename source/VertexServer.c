@@ -1234,7 +1234,7 @@ int VertexServer_run(VertexServer *self)
 		Log_Printf("Unable to open database file\n");
 		return -1; 
 	}
-
+  
 	HttpServer_run(self->httpServer);
 	
 	PDB_commit(self->pdb);
