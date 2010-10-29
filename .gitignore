@@ -95,5 +95,7 @@ CMakeCache.txt
 cmake_install.cmake
 install_manifest.txt
 Makefile
-vartexdb
+vertexdb
 source/basekit/Makefile
+db.tc
+db.tc.wal
