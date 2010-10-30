@@ -3,7 +3,11 @@
 <plist version="1.0">
 <dict>
 	<key>currentDocument</key>
+<<<<<<< HEAD
 	<string>source/store/StoreCursor.c</string>
+=======
+	<string>source/httpserver/HttpServer.c</string>
+>>>>>>> bd0035e0735a686aafb20f4adc4c0d55009f81d1
 	<key>documents</key>
 	<array>
 		<dict>
@@ -54,15 +58,20 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
+<<<<<<< HEAD
 				<integer>10</integer>
 				<key>line</key>
 				<integer>1231</integer>
+=======
+				<integer>18</integer>
+				<key>line</key>
+				<integer>59</integer>
+>>>>>>> bd0035e0735a686aafb20f4adc4c0d55009f81d1
 			</dict>
-			<key>columnSelection</key>
-			<false/>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
+<<<<<<< HEAD
 			<integer>1217</integer>
 			<key>selectFrom</key>
 			<dict>
@@ -75,84 +84,71 @@
 			<dict>
 				<key>column</key>
 				<integer>13</integer>
+=======
+			<integer>13</integer>
+		</dict>
+		<key>source/VertexServer.h</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>44</integer>
+				<key>line</key>
+				<integer>21</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>3</integer>
+		</dict>
+		<key>source/basekit/README.md</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>61</integer>
+>>>>>>> bd0035e0735a686aafb20f4adc4c0d55009f81d1
 				<key>line</key>
 				<integer>1231</integer>
 			</dict>
 		</dict>
-		<key>source/httpserver/HttpRequest.c</key>
+		<key>source/httpserver/HttpServer.c</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>31</integer>
+				<integer>136</integer>
 				<key>line</key>
-				<integer>104</integer>
+				<integer>154</integer>
 			</dict>
-			<key>columnSelection</key>
-			<false/>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>63</integer>
-			<key>selectFrom</key>
-			<dict>
-				<key>column</key>
-				<integer>16</integer>
-				<key>line</key>
-				<integer>104</integer>
-			</dict>
-			<key>selectTo</key>
-			<dict>
-				<key>column</key>
-				<integer>31</integer>
-				<key>line</key>
-				<integer>104</integer>
-			</dict>
+			<integer>144</integer>
 		</dict>
-		<key>source/httpserver/HttpResponse.c</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>18</integer>
-				<key>line</key>
-				<integer>57</integer>
-			</dict>
-			<key>columnSelection</key>
-			<false/>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>29</integer>
-			<key>selectFrom</key>
-			<dict>
-				<key>column</key>
-				<integer>1</integer>
-				<key>line</key>
-				<integer>57</integer>
-			</dict>
-			<key>selectTo</key>
-			<dict>
-				<key>column</key>
-				<integer>18</integer>
-				<key>line</key>
-				<integer>57</integer>
-			</dict>
-		</dict>
+<<<<<<< HEAD
 		<key>source/main.c</key>
+=======
+		<key>source/httpserver/HttpServer.h</key>
+>>>>>>> bd0035e0735a686aafb20f4adc4c0d55009f81d1
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
+<<<<<<< HEAD
 				<integer>3</integer>
 				<key>line</key>
 				<integer>7</integer>
+=======
+				<integer>32</integer>
+				<key>line</key>
+				<integer>27</integer>
+>>>>>>> bd0035e0735a686aafb20f4adc4c0d55009f81d1
 			</dict>
-			<key>columnSelection</key>
-			<false/>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
+<<<<<<< HEAD
 			<integer>0</integer>
 			<key>selectFrom</key>
 			<dict>
@@ -168,6 +164,9 @@
 				<key>line</key>
 				<integer>7</integer>
 			</dict>
+=======
+			<integer>12</integer>
+>>>>>>> bd0035e0735a686aafb20f4adc4c0d55009f81d1
 		</dict>
 		<key>source/pdb/Datum.c</key>
 		<dict>
@@ -204,15 +203,20 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
+<<<<<<< HEAD
 				<integer>13</integer>
 				<key>line</key>
 				<integer>81</integer>
+=======
+				<integer>1</integer>
+				<key>line</key>
+				<integer>85</integer>
+>>>>>>> bd0035e0735a686aafb20f4adc4c0d55009f81d1
 			</dict>
-			<key>columnSelection</key>
-			<false/>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
+<<<<<<< HEAD
 			<integer>41</integer>
 			<key>selectFrom</key>
 			<dict>
@@ -228,6 +232,9 @@
 				<key>line</key>
 				<integer>81</integer>
 			</dict>
+=======
+			<integer>78</integer>
+>>>>>>> bd0035e0735a686aafb20f4adc4c0d55009f81d1
 		</dict>
 		<key>source/pdb/Log.h</key>
 		<dict>
@@ -324,17 +331,45 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
+<<<<<<< HEAD
 				<integer>19</integer>
 				<key>line</key>
 				<integer>30</integer>
+=======
+				<integer>16</integer>
+				<key>line</key>
+				<integer>353</integer>
+>>>>>>> bd0035e0735a686aafb20f4adc4c0d55009f81d1
 			</dict>
 			<key>columnSelection</key>
 			<false/>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
+<<<<<<< HEAD
 			<integer>2</integer>
 			<key>selectFrom</key>
+=======
+			<integer>316</integer>
+			<key>selectFrom</key>
+			<dict>
+				<key>column</key>
+				<integer>5</integer>
+				<key>line</key>
+				<integer>353</integer>
+			</dict>
+			<key>selectTo</key>
+			<dict>
+				<key>column</key>
+				<integer>16</integer>
+				<key>line</key>
+				<integer>353</integer>
+			</dict>
+		</dict>
+		<key>source/pdb/PDB.h</key>
+		<dict>
+			<key>caret</key>
+>>>>>>> bd0035e0735a686aafb20f4adc4c0d55009f81d1
 			<dict>
 				<key>column</key>
 				<integer>16</integer>
@@ -354,14 +389,40 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
+<<<<<<< HEAD
 				<integer>10</integer>
 				<key>line</key>
 				<integer>8</integer>
+=======
+				<integer>17</integer>
+				<key>line</key>
+				<integer>214</integer>
+>>>>>>> bd0035e0735a686aafb20f4adc4c0d55009f81d1
 			</dict>
+			<key>columnSelection</key>
+			<false/>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
+<<<<<<< HEAD
 			<integer>0</integer>
+=======
+			<integer>182</integer>
+			<key>selectFrom</key>
+			<dict>
+				<key>column</key>
+				<integer>6</integer>
+				<key>line</key>
+				<integer>214</integer>
+			</dict>
+			<key>selectTo</key>
+			<dict>
+				<key>column</key>
+				<integer>17</integer>
+				<key>line</key>
+				<integer>214</integer>
+			</dict>
+>>>>>>> bd0035e0735a686aafb20f4adc4c0d55009f81d1
 		</dict>
 		<key>vertexdb_admin</key>
 		<dict>
@@ -381,6 +442,7 @@
 	<key>openDocuments</key>
 	<array>
 		<string>source/VertexServer.c</string>
+<<<<<<< HEAD
 		<string>source/pdb/PDB.c</string>
 		<string>source/store/Store.c</string>
 		<string>source/store/StoreCursor.c</string>
@@ -389,6 +451,14 @@
 		<string>source/pdb/Datum.c</string>
 		<string>vertexdb_admin</string>
 		<string>source/httpserver/HttpResponse.c</string>
+=======
+		<string>source/pdb/PQuery.c</string>
+		<string>source/httpserver/HttpServer.c</string>
+		<string>source/httpserver/HttpServer.h</string>
+		<string>source/pdb/Datum.h</string>
+		<string>source/pdb/File.c</string>
+		<string>source/pdb/Datum.c</string>
+>>>>>>> bd0035e0735a686aafb20f4adc4c0d55009f81d1
 		<string>source/Socket.c</string>
 		<string>thread.c</string>
 		<string>source/main.c</string>
