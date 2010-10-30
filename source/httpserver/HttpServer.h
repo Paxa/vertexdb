@@ -80,7 +80,6 @@ void HttpServer_setRequestCallback_(HttpServer *self, HttpServerRequestCallback 
 void HttpServer_setIdleCallback_(HttpServer *self, HttpServerIdleCallback *f);
 
 void HttpServer_run(HttpServer *self);
-void *HttpServer_acceptor(void *a1);
 void HttpServer_shutdown(HttpServer *self);
 
 #ifdef __cplusplus

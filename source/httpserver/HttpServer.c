@@ -3,7 +3,6 @@
 #include <stdbool.h>
 #include <stdint.h>
 #include <string.h>
-#include <pthread.h>
 
 #include <sys/types.h>
 #include <sys/time.h>
@@ -182,7 +181,6 @@ void HttpServer_handleRequest(struct evhttp_request *req, void *arg)
   }
 }
 
-
 void HttpServer_run(HttpServer *self)
 {
 	if(self->shutdown) return;
@@ -205,21 +203,7 @@ void HttpServer_run(HttpServer *self)
 	
 	evhttp_set_timeout(self->httpd, 180);
 	evhttp_set_gencb(self->httpd, HttpServer_handleRequest, self);  
-
-  pthread_t thread1, thread2;
-  int  iret1, iret2;
 	
-	iret1 = pthread_create( &thread1, NULL, HttpServer_acceptor, (void*) self);
-	iret2 = pthread_create( &thread2, NULL, HttpServer_acceptor, (void*) self);
-	
-	while (!self->shutdown) {
-		sleep(1);
-	}
-}
-
-void *HttpServer_acceptor(void *a1)
-{
-	HttpServer *self = (HttpServer *) a1;
 	while (!self->shutdown)
 	{
 		if(self->idleCallback)
@@ -237,7 +221,6 @@ void *HttpServer_acceptor(void *a1)
 			event_loop(EVLOOP_ONCE);
 		}
 	}
-	return NULL;
 }
 
 void HttpServer_shutdown(HttpServer *self)
