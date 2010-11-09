@@ -49,6 +49,7 @@ struct fuse_operations {
 
 #include "VertexServer.h"
 #include "Log.h"
+#include "actions/write_hash.c"
 #include <sys/types.h>
 #include <sys/time.h>
 #include <sys/queue.h>
@@ -933,6 +934,7 @@ void VertexServer_setupActions(VertexServer *self)
 			
 	// insert
 	VERTEX_SERVER_ADD_ACTION(write);
+	VERTEX_SERVER_ADD_ACTION(write_hash);
 	VERTEX_SERVER_ADD_ACTION(mkdir);
 	VERTEX_SERVER_ADD_ACTION(link);
 	VERTEX_SERVER_ADD_ACTION(increase);
