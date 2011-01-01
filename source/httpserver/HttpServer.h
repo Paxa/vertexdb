@@ -14,7 +14,7 @@ extern "C" {
 #include "HttpRequest.h"
 #include "HttpResponse.h"
 
-typedef void (HttpServerRequestCallback)(void *, void *);
+typedef void (HttpServerRequestCallback)(void *);
 typedef void (HttpServerIdleCallback)(void *);
 //typedef void  (HttpServerWriteMethod)(void *);
 
@@ -40,26 +40,6 @@ typedef struct
 	HttpResponse *httpResponse;
 	int gotRequest;
 } HttpServer;
-
-typedef struct
-{
-	struct evhttp *httpd;
-	struct evhttp_request *request;
-  pthread_t thread;
-	
-  long number;
-  Datum *result;
-	
-	HttpRequest *httpRequest;
-	HttpResponse *httpResponse;
-  HttpServer *httpServer;
-	int gotRequest;
-} ThreadBox;
-
-#define THREADS_NUM 12
-
-static ThreadBox *globalHTTPRunners[THREADS_NUM];
-static ThreadBox *globalCurrentThread;
 
 void *CHash_atString_(CHash *self, const char *s);
 

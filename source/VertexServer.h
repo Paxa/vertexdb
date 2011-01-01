@@ -11,8 +11,8 @@ typedef struct
 	
 	// the http server
 	HttpServer *httpServer;
-	//HttpRequest *httpRequest;
-	//HttpResponse *httpResponse;
+	HttpRequest *httpRequest;
+	HttpResponse *httpResponse;
 	Datum *result; // used for composing the response string
 	// the global json generator
 	yajl_gen yajl;
@@ -28,15 +28,15 @@ typedef struct
 	int debug;
 } VertexServer;
 
-typedef int (VertexAction)(VertexServer *, ThreadBox *);
+typedef int (VertexAction)(VertexServer *);
 
 VertexServer *VertexServer_new(void);
 void VertexServer_free(VertexServer *self);
 
 // private
-void VertexServer_setupPQuery_(ThreadBox *runner, PQuery *q);
-void VertexServer_setErrorCString_(ThreadBox *runner, const char *s);
-void VertexServer_appendError_(ThreadBox *runner, Datum *d);
+void VertexServer_setupPQuery_(VertexServer *self, PQuery *q);
+void VertexServer_setErrorCString_(VertexServer *self, const char *s);
+void VertexServer_appendError_(VertexServer *self, Datum *d);
 
 // command line options
 void VertexServer_setPort_(VertexServer *self, int port);
@@ -49,11 +49,11 @@ void VertexServer_setDebug_(VertexServer *self, int aBool);
 void VertexServer_setHardSync_(VertexServer *self, int aBool);
 
 // request processing
-int VertexServer_process(VertexServer *self, ThreadBox *runner);
+int VertexServer_process(VertexServer *self);
 int VertexServer_run(VertexServer *self);
 int VertexServer_shutdown(VertexServer *self);
-void VertexServer_requestHandler(void *arg, void *runner);
+void VertexServer_requestHandler(void *arg);
  
 // apis
-int VertexServer_api_collectGarbage(VertexServer *self, ThreadBox *runner);
-int VertexServer_api_shutdown(VertexServer *self, ThreadBox *runner);
+int VertexServer_api_collectGarbage(VertexServer *self);
+int VertexServer_api_shutdown(VertexServer *self);
