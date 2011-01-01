@@ -3,24 +3,24 @@
 #include "Socket.h"
 #include "PQuery.h"
 
-int VertexServer_api_amchart(VertexServer *self)
+int VertexServer_api_amchart(VertexServer *self, ThreadBox *runner)
 {
-	Datum *slot1  = HttpRequest_queryValue_(self->httpRequest, "slot1");
+	Datum *slot1  = HttpRequest_queryValue_(runner->httpRequest, "slot1");
 	//Datum *slot2  = HttpRequest_queryValue_(self->httpRequest, "slot2");
 	//Datum *slot3  = HttpRequest_queryValue_(self->httpRequest, "slot3");
-	Datum *subpath  = HttpRequest_queryValue_(self->httpRequest, "subpath");
+	Datum *subpath  = HttpRequest_queryValue_(runner->httpRequest, "subpath");
 	PNode *node = PDB_allocNode(self->pdb);
 	PQuery *q = PNode_query(node);
-	VertexServer_setupPQuery_(self, q);
+	VertexServer_setupPQuery_(runner, q);
 	PNode *tmpNode = PDB_allocNode(self->pdb);
-	Datum *d = self->result;
+	Datum *d = runner->result;
 	Datum *title = 0x0;
 	//int isFirst = 1;
 	
-	if (PNode_moveToPathIfExists_(node, HttpRequest_uriPath(self->httpRequest)) != 0) 
+	if (PNode_moveToPathIfExists_(node, HttpRequest_uriPath(runner->httpRequest)) != 0) 
 	{
-		VertexServer_setErrorCString_(self, "path does not exist: ");
-		VertexServer_appendError_(self, HttpRequest_uriPath(self->httpRequest));
+		VertexServer_setErrorCString_(runner, "path does not exist: ");
+		VertexServer_appendError_(runner, HttpRequest_uriPath(runner->httpRequest));
 		return -1;
 	}
 	
@@ -33,7 +33,7 @@ int VertexServer_api_amchart(VertexServer *self)
 	Datum_appendCString_(d, "\">\n");
 	PNode_startQuery(node);
 	PNode_amSeries(node, d);
-	PNode_moveToPathIfExists_(node, HttpRequest_uriPath(self->httpRequest));
+	PNode_moveToPathIfExists_(node, HttpRequest_uriPath(runner->httpRequest));
 	// series -----------------
 	
 	Datum_appendCString_(d, "<graphs>\n");
@@ -69,7 +69,7 @@ int VertexServer_api_amchart(VertexServer *self)
 		{
 			sprintf(slotKey, "slot%i", slotNumber);
 		
-			Datum *slotName  = HttpRequest_queryValue_(self->httpRequest, slotKey);
+			Datum *slotName  = HttpRequest_queryValue_(runner->httpRequest, slotKey);
 			if(Datum_size(slotName) == 0) break;
 			PNode_amGraphKey_(node, title, slotName, d);
 			slotNumber ++;
@@ -81,29 +81,29 @@ int VertexServer_api_amchart(VertexServer *self)
 	Datum_appendCString_(d, "</graphs>\n");
 	Datum_appendCString_(d, "</chart>\n");
 
-	HttpResponse_setContentType_(self->httpResponse, "text/xml");
+	HttpResponse_setContentType_(runner->httpResponse, "text/xml");
 	//HttpResponse_setContentType_(self->httpResponse, "text/xml; charset=utf-8");
 	return 0;
 }
 
 
-int VertexServer_api_ampie(VertexServer *self)
+int VertexServer_api_ampie(VertexServer *self, ThreadBox *runner)
 {
-	Datum *slot1  = HttpRequest_queryValue_(self->httpRequest, "slot1");
+	Datum *slot1  = HttpRequest_queryValue_(runner->httpRequest, "slot1");
 	//Datum *slot2  = HttpRequest_queryValue_(self->httpRequest, "slot2");
 	//Datum *slot3  = HttpRequest_queryValue_(self->httpRequest, "slot3");
 	//Datum *subpath  = HttpRequest_queryValue_(self->httpRequest, "subpath");
 	PNode *node = PDB_allocNode(self->pdb);
 	PQuery *q = PNode_query(node);
-	VertexServer_setupPQuery_(self, q);
+	VertexServer_setupPQuery_(runner, q);
 	PNode *tmpNode = PDB_allocNode(self->pdb);
-	Datum *d = self->result;
+	Datum *d = runner->result;
 	Datum *k;
 	
-	if (PNode_moveToPathIfExists_(node, HttpRequest_uriPath(self->httpRequest)) != 0) 
+	if (PNode_moveToPathIfExists_(node, HttpRequest_uriPath(runner->httpRequest)) != 0) 
 	{
-		VertexServer_setErrorCString_(self, "path does not exist: ");
-		VertexServer_appendError_(self, HttpRequest_uriPath(self->httpRequest));
+		VertexServer_setErrorCString_(runner, "path does not exist: ");
+		VertexServer_appendError_(runner, HttpRequest_uriPath(runner->httpRequest));
 		return -1;
 	}
 		
@@ -126,7 +126,7 @@ int VertexServer_api_ampie(VertexServer *self)
 		PNode_next(node);
 	}
 
-	HttpResponse_setContentType_(self->httpResponse, "text/plain");
+	HttpResponse_setContentType_(runner->httpResponse, "text/plain");
 	//HttpResponse_setContentType_(self->httpResponse, "text/xml; charset=utf-8");
 	return 0;
 }
