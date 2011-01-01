@@ -1,79 +1,132 @@
 #include "Date.h"
+#include "PNode.h"
 #include "Socket.h"
 #include "PQuery.h"
-
 #include <yajl/yajl_parse.h>  
 #include <yajl/yajl_gen.h>
 
+#define MAX_MULTIWRITE_NESTING 20
 
-static int reformat_null(void * ctx)
+typedef struct
 {
-    yajl_gen g = (yajl_gen) ctx;
-    yajl_gen_null(g);
+  PNode *parents[MAX_MULTIWRITE_NESTING];
+  int length;
+  Datum *lastKey;
+  int writen;
+} PPNode;
+
+PNode *PPNode_current(PPNode *self) {
+  return self->parents[self->length];
+}
+
+void PPNode_go(PPNode *self, PNode *child) {
+  self->length++;
+  self->parents[self->length] = child;
+}
+
+void PPNode_downOrCreate(PPNode *self) {
+  if (!self->writen) {
+    PNode *newChild = PNode_clone(PPNode_current(self));
+    PNode_createMoveToKey_(newChild, self->lastKey);
+    self->writen = 1;
+    PPNode_go(self, newChild);
+  }
+}
+
+void PPNode_down(PPNode *self, Datum *key) {
+  
+  PPNode_downOrCreate(self);
+  Datum_copy_(self->lastKey, key);
+  self->writen = 0;
+}
+
+void PPNode_up(PPNode *self) {
+  self->length--;
+}
+
+void PPNode_write(PPNode *self, Datum *value) {
+  PNode_atPut_(PPNode_current(self), self->lastKey, value);
+  self->writen = 1;
+}
+
+PPNode *PPNode_new(void) {
+  PPNode *self = calloc(1, sizeof(PPNode));
+  self->length = -1;
+  self->lastKey = Datum_new();
+  self->writen = 1;
+  return self;
+}
+
+static int reformat_null(void * ppnode)
+{
+    PPNode *self = (PPNode*) ppnode;
     return 1;
 }
 
-static int reformat_boolean(void * ctx, int boolean)
-{
-    yajl_gen g = (yajl_gen) ctx;
-    yajl_gen_bool(g, boolean);
-    return 1;
-}
-
-static int reformat_number(void * ctx, const char * s, unsigned int l)
-{
-    yajl_gen g = (yajl_gen) ctx;
-    Log_Printf__("number %s %i \n", s, l);
-    yajl_gen_number(g, s, l);
-    return 1;
-}
-
-static int reformat_string(void * ctx, const unsigned char * stringVal,
+static int reformat_string(void * ppnode, const unsigned char * stringVal,
                            unsigned int stringLen)
 {
-    yajl_gen g = (yajl_gen) ctx;
-    Log_Printf__("srting %s %i \n", stringVal, stringLen);
-    yajl_gen_string(g, stringVal, stringLen);
+    PPNode* self = (PPNode*) ppnode;
+    Datum *value = Datum_new();
+    Datum_setData_size_(value, stringVal, stringLen);
+    
+    PPNode_write(self, value);
     return 1;
 }
 
-static int reformat_map_key(void * ctx, const unsigned char * stringVal,
+static int reformat_boolean(void * ppnode, int boolean)
+{
+    PPNode* self = (PPNode*) ppnode;
+    if (boolean) {
+      reformat_string(ppnode, "true", 4);
+    } else {
+      reformat_string(ppnode, "false", 5);
+    }
+    
+    return 1;
+}
+
+static int reformat_number(void * ppnode, const char * s, unsigned int l)
+{
+  return reformat_string(ppnode, s, l);
+}
+
+static int reformat_map_key(void* ppnode, const unsigned char * stringVal,
                             unsigned int stringLen)
 {
-    yajl_gen g = (yajl_gen) ctx;
-    Log_Printf__("key %s %i \n", stringVal, stringLen);
-    yajl_gen_string(g, stringVal, stringLen);
+    PPNode* self = (PPNode*) ppnode;
+    
+    Datum *value = Datum_new();
+    
+    Datum_setData_size_(value, stringVal, stringLen);
+    
+    PPNode_down(self, value);
     return 1;
 }
 
-static int reformat_start_map(void * ctx)
-{
-    yajl_gen g = (yajl_gen) ctx;
-    Log_Printf("start_map \n");
-    yajl_gen_map_open(g);
+static int reformat_start_map(void * ppnode)
+{  
+    PPNode* self = (PPNode*) ppnode;
     return 1;
 }
 
 
-static int reformat_end_map(void * ctx)
+static int reformat_end_map(void * ppnode)
 {
-    yajl_gen g = (yajl_gen) ctx;
-    Log_Printf("end_map \n");
-    yajl_gen_map_close(g);
+    PPNode* self = (PPNode*) ppnode;
+    PPNode_up(self);
     return 1;
 }
 
-static int reformat_start_array(void * ctx)
+static int reformat_start_array(void * ppnode)
 {
-    yajl_gen g = (yajl_gen) ctx;
-    yajl_gen_array_open(g);
+    PPNode* self = (PPNode*) ppnode;
     return 1;
 }
 
-static int reformat_end_array(void * ctx)
+static int reformat_end_array(void * ppnode)
 {
-    yajl_gen g = (yajl_gen) ctx;
-    yajl_gen_array_close(g);
+    PPNode* self = (PPNode*) ppnode;
     return 1;
 }
 
@@ -91,33 +144,18 @@ static yajl_callbacks callbacks = {
     reformat_end_array
 };
 
-/*
-  Writes many of values by 1 request
-  Data given from recieved post data in json format
-  
-  Call as:
-  /users?action=write_hash&key=12
-  POST {"_first_name": "Peter", "_last_name": "Bishop"}
-*/
+
 int VertexServer_api_write_hash(VertexServer *self)
 {
-	PNode *node = PDB_allocNode(self->pdb);
+	PNode *node  = PDB_allocNode(self->pdb);
 	Datum *key   = HttpRequest_queryValue_(self->httpRequest, "key");
 	Datum *value = HttpRequest_queryValue_(self->httpRequest, "value");
 	Datum *post  = HttpRequest_postData(self->httpRequest);
 	
-  yajl_handle hand;  
-  static unsigned char fileData[65536];  
-  /* generator config */  
-  yajl_gen_config conf = { 1, "  " };  
-  yajl_gen g;  
-  yajl_status stat;  
-  size_t rd;  
-  /* allow comments */  
+  yajl_handle hand;   
+  yajl_status stat;
+  
   yajl_parser_config cfg = { 1, 1 }; 
-	
-	g = yajl_gen_alloc(&conf, NULL);
-	hand = yajl_alloc(&callbacks, &cfg,  NULL, (void *) g);  
 	
 	if(Datum_size(post) != 0)
 	{
@@ -131,33 +169,19 @@ int VertexServer_api_write_hash(VertexServer *self)
 		return -1;
 	}
 	
+  PNode_createMoveToKey_(node, key);
+	
+  PPNode *nodeSet = PPNode_new();
+  
+	hand = yajl_alloc(&callbacks, &cfg,  NULL, (void *) nodeSet);
+	
+  PPNode_go(nodeSet, node);
+  
 	stat = yajl_parse(hand, value->data, Datum_size(value));
 	
 	if (stat == yajl_status_ok) {
     Log_Printf("parsed\n");
-    
-    const unsigned char * buf;  
-    unsigned int len;  
-    yajl_gen_get_buf(g, &buf, &len);  
-    fwrite(buf, 1, len, stdout);  
-    yajl_gen_clear(g);
 	}
-	
-  Log_Printf_("writing %s\n", value->data);
   
-  /*
-	if(Datum_equalsCString_(mode, "append"))
-	{
-		PNode_atCat_(node, key, value);
-	}
-	else if(Datum_equalsCString_(mode, "meta"))
-	{
-		PNode_metaAt_put_(node, key, value);
-	}
-	else
-	{
-		PNode_atPut_(node, key, value);
-	}
-	*/
 	return 0;
 }

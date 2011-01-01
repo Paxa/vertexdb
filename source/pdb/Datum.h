@@ -38,7 +38,7 @@ void Datum_nullTerminate(Datum *self);
 
 const char *Datum_data(Datum *self);
 void Datum_show(Datum *self);
-
+Datum *Datum_escapeHTML(Datum *self);
 void Datum_copy_(Datum *self, Datum *other);
 void Datum_copy_and_(Datum *self, Datum *other, Datum *other2);
 

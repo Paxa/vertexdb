@@ -107,6 +107,19 @@ void PNode_clear(PNode *self)
 	self->yajl = 0x0;
 }
 
+PNode *PNode_clone(PNode *source) {
+  PNode *self = PNode_poolNew();
+  
+  Datum_copy_(self->pid,      source->pid);
+  Datum_copy_(self->pidPath,  source->pidPath);
+  Datum_copy_(self->keyPath,  source->keyPath);
+  Datum_copy_(self->sizePath, source->sizePath);
+  Datum_copy_(self->parentPid,source->parentPid);
+  
+  PNode_setPdb_(self, source->pdb);
+	return self;
+}
+
 PQuery *PNode_query(PNode *self)
 {
 	if(!self->query)

@@ -141,6 +141,25 @@ const char *Datum_data(Datum *self)
 	return self->data;
 }
 
+Datum *Datum_escapeHTML(Datum *self)
+{
+  Datum *new_data = Datum_new();
+  int i;
+  
+  for (i = 0; i < Datum_size(self); i++) {
+    if (self->data[i] == '<') {
+      Datum_appendCString_(new_data, "&lt;");
+    } else if (self->data[i] == '>') {
+      Datum_appendCString_(new_data, "&gt;");
+    } else if (self->data[i] == '&') {
+      Datum_appendCString_(new_data, "&amp;");
+    } else {
+      Datum_appendBytes_size_(new_data, self->data + i, 1);
+    }
+  }
+  return new_data;
+}
+
 void Datum_show(Datum *self)
 {
 	// assume null terminated

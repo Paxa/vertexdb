@@ -42,6 +42,7 @@ typedef int (PNodeOp)(PNode *, Datum *);
 Pool *PNode_pool(void);
 PNode *PNode_poolNew(void);
 PNode *PNode_new(void);
+PNode *PNode_clone(PNode *source);
 void PNode_poolFreeRefs(void);
 void PNode_freePool(void);
 

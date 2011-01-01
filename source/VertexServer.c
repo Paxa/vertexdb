@@ -822,7 +822,7 @@ int VertexServer_api_view(VertexServer *self)
 				
 				Datum_appendCString_(d, "<td>");
 				Datum_appendCString_(d, "&nbsp;&nbsp;<span class=value>");
-				Datum_append_(d, PNode_value(node));
+				Datum_append_(d, Datum_escapeHTML(PNode_value(node)));
 				Datum_appendCString_(d, "</span>");
 				Datum_appendCString_(d, "<br>\n");
 				Datum_appendCString_(d, "</td>");
